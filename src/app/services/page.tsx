@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import prisma from "@/lib/prisma"
-import Link from "next/link"
 import { ServiceForm } from "@/components/services/service-form"
 import { ServiceList } from "@/components/services/service-list"
 
@@ -12,20 +11,8 @@ export default async function ServicesPage(props: { searchParams: Promise<{ q?: 
   const query = searchParams.q
   
   // Fetch data for the form
-  const vehiclesList = await prisma.vehicle.findMany({ 
-      select: { 
-          id: true, 
-          regNumber: true, 
-          model: true, 
-          ownerName: true,
-          ownerPhone: true,
-          ownerAddress: true,
-          ownerGstin: true,
-          chassisNumber: true,
-          engineNumber: true
-      } 
-  })
-  const partsList = await prisma.part.findMany({ select: { id: true, name: true, price: true } })
+  // Fetch data for the form
+  // vehiclesList and partsList removed as they were unused
 
   // Build query
   const where: any = {}

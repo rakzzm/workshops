@@ -4,18 +4,33 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from "react"
 import { getTickets, getTicketDetails, addMessage, updateTicketStatus } from "@/app/actions/ticket-actions"
 import { SLABadge } from "@/components/feedback/sla-badge"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// Tabs removed
 import { Search, Filter, Send, User, Car, CheckCircle2, Clock } from "lucide-react"
 
+interface Ticket {
+    id: number
+    ticketNumber: string
+    subject: string
+    description: string
+    status: string
+    priority: string
+    category: string
+    createdAt: string | Date
+    slaTargetDate: string | Date
+    customer?: { firstName: string, lastName: string, phone: string, [key: string]: any } | null
+    vehicle?: { regNumber: string, model: string, [key: string]: any } | null
+    messages?: any[]
+}
+
 export default function FeedbackPage() {
-    const [tickets, setTickets] = useState<any[]>([])
-    const [selectedTicket, setSelectedTicket] = useState<any>(null)
+    const [tickets, setTickets] = useState<Ticket[]>([])
+    const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
     const [message, setMessage] = useState("")
     const [loading, setLoading] = useState(true)
 
@@ -79,7 +94,7 @@ export default function FeedbackPage() {
                             >
                                 <div className="flex justify-between items-start mb-1">
                                     <span className="font-mono text-xs text-slate-500">{t.ticketNumber}</span>
-                                    <SLABadge dueDate={t.slaTargetDate} status={t.status} />
+                                    <SLABadge dueDate={new Date(t.slaTargetDate)} status={t.status} />
                                 </div>
                                 <h3 className="font-semibold text-sm line-clamp-1">{t.subject}</h3>
                                 <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{t.description}</p>

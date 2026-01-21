@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 export const dynamic = 'force-dynamic'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Plus, Search, Filter } from "lucide-react"
+import { Search, Filter } from "lucide-react"
 import { PartDialog } from "@/components/inventory/part-dialog"
 import { PartActions } from "@/components/inventory/part-actions"
 import Link from "next/link"
