@@ -16,7 +16,7 @@ const navigation = [
   { name: "Purchase Orders", href: "/orders", icon: ShoppingCart, roles: ['ADMIN'] },
   { name: "Mechanics", href: "/mechanics", icon: Wrench, roles: ['ADMIN'] },
   { name: "Customers", href: "/customers", icon: Users2, roles: ['ADMIN'] },
-  { name: "Service History", href: "/service-history", icon: Clock, roles: ['ADMIN', 'USER'] },
+  { name: "Vehicle Service History", href: "/service-history", icon: Clock, roles: ['ADMIN', 'USER'] },
   { name: "Reports", href: "/reports", icon: ChartBar, roles: ['ADMIN'] },
   { name: "Feedback", href: "/feedback", icon: MessageSquare, roles: ['ADMIN'] },
   { name: "Vendors", href: "/vendors", icon: Store, roles: ['ADMIN'] },

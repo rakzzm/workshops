@@ -19,16 +19,16 @@ export default function FeedbackPage() {
     const [message, setMessage] = useState("")
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        loadTickets()
-    }, [])
-
     async function loadTickets() {
         setLoading(true)
         const data = await getTickets()
         setTickets(data)
         setLoading(false)
     }
+
+    useEffect(() => {
+        loadTickets()
+    }, [])
 
     async function handleSelectTicket(id: number) {
         const details = await getTicketDetails(id)
