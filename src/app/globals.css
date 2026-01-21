@@ -1,26 +1,242 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  /* Pink Theme Palette */
+  --font-pink: oklch(0.45 0.2 330); /* Dark Magenta for text */
+  --hot-pink: oklch(0.6 0.25 330);  /* Bright Pink for primary/icons */
+  --light-pink: oklch(0.98 0.01 330); /* Very light pink for backgrounds */
+
+  --background: oklch(1 0 0); /* Base white, overridden by gradient */
+  --foreground: var(--font-pink); /* Pinkish Text */
+  
+  --card: oklch(1 0 0 / 0.8); /* Translucent white card */
+  --card-foreground: var(--font-pink);
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--font-pink);
+  
+  --primary: var(--hot-pink);
+  --primary-foreground: oklch(1 0 0);
+  
+  --secondary: oklch(0.96 0.02 330); /* Light pink secondary */
+  --secondary-foreground: var(--hot-pink);
+  
+  --muted: oklch(0.96 0.02 330);
+  --muted-foreground: oklch(0.6 0.1 330);
+  
+  --accent: oklch(0.96 0.02 330);
+  --accent-foreground: var(--hot-pink);
+  
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.02 330);
+  --input: oklch(0.92 0.02 330);
+  --ring: var(--hot-pink);
+  
+  --chart-1: var(--hot-pink);
+  --chart-2: oklch(0.7 0.2 330);
+  --chart-3: oklch(0.8 0.15 330);
+  --chart-4: oklch(0.5 0.2 330);
+  --chart-5: oklch(0.9 0.05 330);
+  
+  --sidebar: oklch(1 0 0 / 0.9);
+  --sidebar-foreground: var(--font-pink);
+  --sidebar-primary: var(--hot-pink);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.96 0.02 330);
+  --sidebar-accent-foreground: var(--hot-pink);
+  --sidebar-border: oklch(0.92 0.02 330);
+  --sidebar-ring: var(--hot-pink);
+}
+
+.dark {
+  /* Enforce Light/Pink theme even in Dark mode class (Disable Dark Mode visually) */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.45 0.2 330);
+  --card: oklch(1 0 0 / 0.8);
+  --card-foreground: oklch(0.45 0.2 330);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.45 0.2 330);
+  --primary: oklch(0.6 0.25 330);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.02 330);
+  --secondary-foreground: oklch(0.6 0.25 330);
+  --muted: oklch(0.96 0.02 330);
+  --muted-foreground: oklch(0.6 0.1 330);
+  --accent: oklch(0.96 0.02 330);
+  --accent-foreground: oklch(0.6 0.25 330);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.02 330);
+  --input: oklch(0.92 0.02 330);
+  --ring: oklch(0.6 0.25 330);
+  --chart-1: oklch(0.6 0.25 330);
+  --chart-2: oklch(0.7 0.2 330);
+  --chart-3: oklch(0.8 0.15 330);
+  --chart-4: oklch(0.5 0.2 330);
+  --chart-5: oklch(0.9 0.05 330);
+  --sidebar: oklch(1 0 0 / 0.9);
+  --sidebar-foreground: oklch(0.45 0.2 330);
+  --sidebar-primary: oklch(0.6 0.25 330);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.96 0.02 330);
+  --sidebar-accent-foreground: oklch(0.6 0.25 330);
+  --sidebar-border: oklch(0.92 0.02 330);
+  --sidebar-ring: oklch(0.6 0.25 330);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #ffffff 0%, #fee2e2 100%); /* Full page gradient white to pink */
+    min-height: 100vh;
+    font-size: 112.5%; /* Scale up base size by 12.5% */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media print {
+  /* Force landscape orientation for A4 paper */
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+  
+  /* Hide EVERYTHING by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Reset body for print */
+  body {
+    background: white !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  
+  /* Make ONLY the service card visible */
+  .print-service-card, .print-service-card * {
+    visibility: visible !important;
+  }
+
+  /* Position the card at top-left of page */
+  .print-service-card {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Unset heights causing blank pages */
+  .overflow-y-auto, .overflow-hidden, .h-screen, .min-h-\[1000px\] {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  /* Hide only specific non-printable UI buttons if they are inside the card */
+  button, .print\:hidden {
+    display: none !important;
+  }
+
+  /* Optimize tables for landscape printing */
+  table {
+    page-break-inside: avoid;
+    width: 100% !important;
+    font-size: 8px !important;
+    table-layout: auto !important;
+  }
+
+  /* Compact table cells */
+  th, td {
+    padding: 2px 4px !important;
+    font-size: 8px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Prevent page breaks in rows */
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  /* Eliminate min-width constraints that cause overflow */
+  .min-w-\[1200px\], [class*="min-w-"] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Compact column widths */
+  thead th {
+    font-size: 7px !important;
+    font-weight: 600 !important;
+  }
+
+  /* Optimize specific columns */
+  td:nth-child(1), th:nth-child(1) { width: 3% !important; }  /* # */
+  td:nth-child(2), th:nth-child(2) { width: 8% !important; }  /* Type */
+  td:nth-child(3), th:nth-child(3) { width: 20% !important; } /* Description */
+  td:nth-child(4), th:nth-child(4) { width: 8% !important; }  /* HSN/SAC */
+  td:nth-child(5), th:nth-child(5) { width: 8% !important; }  /* Unit Type */
+  td:nth-child(6), th:nth-child(6) { width: 5% !important; }  /* Qty */
+  td:nth-child(7), th:nth-child(7) { width: 5% !important; }  /* Unit */
+  td:nth-child(8), th:nth-child(8) { width: 7% !important; }  /* Rate */
+  td:nth-child(9), th:nth-child(9) { width: 7% !important; }  /* Discount */
+  td:nth-child(10), th:nth-child(10) { width: 8% !important; } /* Taxable */
+  td:nth-child(11), th:nth-child(11) { width: 7% !important; } /* CGST */
+  td:nth-child(12), th:nth-child(12) { width: 7% !important; } /* SGST */
+  td:nth-child(13), th:nth-child(13) { width: 7% !important; } /* KFC/Cess */
 }

@@ -1,0 +1,324 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id         Int      @id @default(autoincrement())
+  customerId String   @unique
+  firstName  String
+  lastName   String
+  phone      String
+  email      String?
+  address    String?
+  gstin      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  vehicles   Vehicle[]
+  jobs       JobBoard[]
+  tickets    Ticket[]
+}
+
+model Vehicle {
+  id        Int      @id @default(autoincrement())
+  regNumber String   @unique
+  type      String   // TWO_WHEELER, FOUR_WHEELER
+  ownerName String
+  model     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  serviceRecords ServiceRecord[]
+  chassisNumber String?
+  engineNumber  String?
+  ownerPhone    String?
+  ownerAddress  String?
+  ownerGstin    String?
+  
+  // Customer Relationship
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  
+  // Auth User Relationship (Owner)
+  ownerId    String? 
+  owner      User?     @relation(fields: [ownerId], references: [id])
+
+  jobs       JobBoard[]
+  tickets    Ticket[]
+}
+
+model ServiceRecord {
+  id          Int      @id @default(autoincrement())
+  vehicleId   Int
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  date        DateTime @default(now())
+  status      String   // PENDING, COMPLETED, IN_PROGRESS
+  mechanicNotes String?
+  complaint   String?
+  totalCost   Float    @default(0)
+  odometer    Int?
+  serviceType String?  // e.g. "PMS 20k", "General Repair"
+  fuelLevel   String?  // e.g. "25%", "50%"
+  serviceAdvisor String?
+  estimatedDate DateTime?
+  nextServiceDate DateTime?
+  images      String?  // JSON string of image URLs
+  
+  customerSignature String? // Data URL or path
+  advisorSignature  String? // Data URL or path
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  parts       ServicePart[]
+  
+  mechanicId  Int?
+  mechanic    Mechanic? @relation(fields: [mechanicId], references: [id])
+  feedback    Feedback?
+}
+
+model Mechanic {
+  id                Int             @id @default(autoincrement())
+  employeeId        String          @unique
+  name              String
+  email             String?
+  phone             String?
+  
+  // Professional Info
+  specialization    String?
+  department        String?         // Engine, Electrical, Body, etc.
+  yearsExperience   Int             @default(0)
+  hourlyRate        Float           @default(0)
+  certifications    String?         // JSON array of certifications
+  skills            String?         // JSON array of skills
+  
+  // Performance & Availability
+  performanceRating Float           @default(3.5)
+  availability      String          @default("AVAILABLE") // AVAILABLE, BUSY, ON_LEAVE
+  shift             String?         // MORNING, AFTERNOON, NIGHT, FLEXIBLE
+  status            String          @default("ACTIVE") // ACTIVE, INACTIVE
+  
+  // Additional Details
+  emergencyContact  String?
+  notes             String?
+  hireDate          DateTime?
+  joinedDate        DateTime        @default(now())
+  
+  serviceRecords    ServiceRecord[]
+  jobs              JobBoard[]
+}
+
+model Part {
+  id            Int      @id @default(autoincrement())
+  name          String
+  sku           String   @unique
+  category      String // 2-wheeler, 4-wheeler, Universal
+  stock         Int      @default(0)
+  price         Float
+  minStockLevel Int      @default(5)
+  imageUrl      String?
+  system        String?  // e.g. "Engine Components", "Braking System"
+  compatibility String?  // e.g. "Maruti Suzuki", "Universal"
+  serviceParts  ServicePart[]
+}
+
+model ServicePart {
+  id              Int      @id @default(autoincrement())
+  serviceRecordId Int
+  serviceRecord   ServiceRecord @relation(fields: [serviceRecordId], references: [id])
+  partId          Int?
+  part            Part?    @relation(fields: [partId], references: [id])
+  quantity        Int      @default(1)
+  itemType        String   @default("PART") // "PART" or "LABOR"
+  description     String?  // For labor desc or override
+  unitPrice       Float
+  taxRate         Float    @default(0) // Legacy or Total Tax %
+  taxAmount       Float    @default(0) // Total Tax Amount
+  discount        Float    @default(0) // Legacy or Total Discount Amount
+
+  // Detailed Breakdown Fields
+  hsnSac          String?
+  issueType       String?  // e.g. "Paid", "Warranty"
+  uom             String?  // Unit of Measure
+  
+  discountPercent Float    @default(0)
+  discountAmount  Float    @default(0)
+
+  cgstPercent     Float    @default(0)
+  cgstAmount      Float    @default(0)
+  sgstPercent     Float    @default(0)
+  sgstAmount      Float    @default(0)
+  cessPercent     Float    @default(0)
+  cessAmount      Float    @default(0)
+
+  costAtTime      Float    // Final calculated cost (Taxable + Taxes)
+
+  vendorId        Int?
+  vendor          Vendor?  @relation(fields: [vendorId], references: [id])
+}
+
+model Vendor {
+  id               Int      @id @default(autoincrement())
+  vendorId         String   @unique
+  companyName      String
+  contactPerson    String?
+  email            String?
+  phone            String
+  address          String?
+  city             String?
+  state            String?
+  pincode          String?
+  gstin            String?
+  pan              String?
+  
+  // Business Details
+  category         String?  // Parts, Tools, Consumables, Services, General
+  rating           Float    @default(3.0)
+  paymentTerms     String?  // NET30, NET60, COD, Advance
+  creditLimit      Float?
+  
+  // Status & Metrics
+  status           String   @default("ACTIVE") // ACTIVE, INACTIVE, BLOCKED
+  totalPurchases   Float    @default(0)
+  lastPurchaseDate DateTime?
+  
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  purchaseOrders   PurchaseOrder[]
+  serviceParts     ServicePart[]
+}
+
+model PurchaseOrder {
+  id        Int      @id @default(autoincrement())
+  status    String   // PENDING, ORDERED, RECEIVED
+  date      DateTime @default(now())
+  items     String?  // JSON or related table, keeping simple for now
+  
+  vendorId  Int?
+  vendor    Vendor?  @relation(fields: [vendorId], references: [id])
+}
+
+model JobBoard {
+  id              Int      @id @default(autoincrement())
+  jobNumber       String   @unique
+  
+  // Customer & Vehicle
+  customerId      Int?
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  vehicleId       Int?
+  vehicle         Vehicle?  @relation(fields: [vehicleId], references: [id])
+  
+  // Job Details
+  repairType      String   // Engine, Transmission, Electrical, Body, Suspension, Brakes, AC, General
+  description     String
+  estimatedCost   Float?
+  finalCost       Float?
+  
+  // Mechanic Assignment
+  mechanicId      Int?
+  mechanic        Mechanic? @relation(fields: [mechanicId], references: [id])
+  
+  // Approval Workflow
+  status          String   @default("PENDING") // PENDING, APPROVED, REJECTED, IN_PROGRESS, COMPLETED
+  submittedBy     String?
+  approvedBy      String?
+  assignedApprover String? // The person selected to approve this job
+  rejectedBy      String?
+  rejectionReason String?
+  
+  // Timestamps
+  submittedAt     DateTime @default(now())
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  
+  priority        String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  notes           String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model StoreSettings {
+  id        Int      @id @default(autoincrement())
+  shopName  String   @default("My Shop")
+  email     String?
+  phone     String?
+  address   String?
+  currency  String   @default("USD")
+  logoUrl   String?
+  updatedAt DateTime @updatedAt
+}
+
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String    // Hashed
+  role          String    @default("USER") // "ADMIN" or "USER"
+  phone         String?
+  image         String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  vehicles      Vehicle[]
+}
+
+model Ticket {
+  id              Int           @id @default(autoincrement())
+  ticketNumber    String        @unique // e.g., TKT-2023-001
+  status          String        @default("OPEN") // OPEN, INVESTIGATING, WAITING, RESOLVED
+  priority        String        @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  category        String        // BILLING, MECHANICAL, SERVICE_QUALITY, OTHER
+  
+  description     String
+  subject         String
+  
+  // SLA Fields
+  slaTargetDate   DateTime
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  resolvedAt      DateTime?
+
+  // Relationships
+  customerId      Int?
+  customer        Customer?     @relation(fields: [customerId], references: [id])
+  vehicleId       Int?
+  vehicle         Vehicle?      @relation(fields: [vehicleId], references: [id])
+  
+  messages        TicketMessage[]
+}
+
+model TicketMessage {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  sender    String   // CUSTOMER, ADMIN, SYSTEM
+  content   String
+  timestamp DateTime @default(now())
+}
+
+model Feedback {
+  id              Int            @id @default(autoincrement())
+  serviceRecordId Int            @unique
+  serviceRecord   ServiceRecord  @relation(fields: [serviceRecordId], references: [id])
+  rating          Int            // 1-5
+  comment         String?
+  tags            String?        // JSON string of tags
+  createdAt       DateTime       @default(now())
+}
+
+model SLAConfig {
+  id                  Int    @id @default(autoincrement())
+  priority            String @unique // LOW, MEDIUM, HIGH, CRITICAL
+  responseTimeHours   Int
+  resolutionTimeHours Int
+}

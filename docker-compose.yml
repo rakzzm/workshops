@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: workshop-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3434:3000"
+    volumes:
+      - ./prisma/dev.db:/app/dev.db
+    environment:
+      - DATABASE_URL=file:./dev.db
+    restart: always
