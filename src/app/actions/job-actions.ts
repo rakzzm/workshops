@@ -3,6 +3,12 @@
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
+// Helper to safely parse ID
+const parseId = (id: number | string) => {
+  const parsed = parseInt(id.toString())
+  return isNaN(parsed) ? -1 : parsed
+}
+
 // Get all jobs with related data
 export async function getJobs() {
   try {
@@ -45,10 +51,13 @@ export async function createJob(data: any) {
 }
 
 // Approve job
-export async function approveJob(id: number, data: any) {
+export async function approveJob(id: number | string, data: any) {
   try {
+    const numericId = parseId(id)
+    if (numericId === -1) throw new Error("Invalid ID")
+
     const job = await prisma.jobBoard.update({
-      where: { id },
+      where: { id: numericId },
       data: {
         status: "APPROVED",
         mechanicId: data.mechanicId || null,
@@ -67,10 +76,13 @@ export async function approveJob(id: number, data: any) {
 }
 
 // Reject job
-export async function rejectJob(id: number, data: any) {
+export async function rejectJob(id: number | string, data: any) {
   try {
+    const numericId = parseId(id)
+    if (numericId === -1) throw new Error("Invalid ID")
+
     const job = await prisma.jobBoard.update({
-      where: { id },
+      where: { id: numericId },
       data: {
         status: "REJECTED",
         rejectedBy: data.rejectedBy || "Manager",
@@ -87,10 +99,13 @@ export async function rejectJob(id: number, data: any) {
 }
 
 // Start job (move to IN_PROGRESS)
-export async function startJob(id: number) {
+export async function startJob(id: number | string) {
   try {
+    const numericId = parseId(id)
+    if (numericId === -1) throw new Error("Invalid ID")
+
     const job = await prisma.jobBoard.update({
-      where: { id },
+      where: { id: numericId },
       data: {
         status: "IN_PROGRESS",
         startedAt: new Date(),
@@ -105,19 +120,47 @@ export async function startJob(id: number) {
 }
 
 // Complete job
-export async function completeJob(id: number, data: any) {
+export async function completeJob(id: number | string, data: any) {
   try {
-    const job = await prisma.jobBoard.update({
-      where: { id },
-      data: {
-        status: "COMPLETED",
-        finalCost: data.finalCost,
-        completedAt: new Date(),
-        notes: data.notes || null,
-      },
+    const numericId = parseId(id)
+    if (numericId === -1) throw new Error("Invalid ID")
+    
+    // Use transaction to ensure both update and service record creation happen
+    const result = await prisma.$transaction(async (tx) => {
+        // 1. Update Job Status
+        const job = await tx.jobBoard.update({
+            where: { id: numericId },
+            data: {
+                status: "COMPLETED",
+                finalCost: data.finalCost,
+                completedAt: new Date(),
+                notes: data.notes || null,
+            },
+            include: { vehicle: true, customer: true }
+        })
+
+        // 2. Create Service Record if vehicle exists
+        if (job.vehicleId) {
+            await tx.serviceRecord.create({
+                data: {
+                    vehicleId: job.vehicleId,
+                    date: new Date(),
+                    status: "COMPLETED",
+                    serviceType: job.repairType,
+                    mechanicNotes: job.description,
+                    totalCost: data.finalCost || job.estimatedCost || 0,
+                    mechanicId: job.mechanicId,
+                    complaint: job.description
+                }
+            })
+        }
+
+        return job
     })
+
     revalidatePath("/jobs")
-    return { success: true, job }
+    revalidatePath("/services") // Update service history
+    return { success: true, job: result }
   } catch (error) {
     console.error(error)
     return { success: false, error: "Failed to complete job" }
@@ -125,10 +168,13 @@ export async function completeJob(id: number, data: any) {
 }
 
 // Delete job
-export async function deleteJob(id: number) {
+export async function deleteJob(id: number | string) {
   try {
+    const numericId = parseId(id)
+    if (numericId === -1) throw new Error("Invalid ID")
+    
     await prisma.jobBoard.delete({
-      where: { id }
+      where: { id: numericId }
     })
     revalidatePath("/jobs")
     return { success: true }

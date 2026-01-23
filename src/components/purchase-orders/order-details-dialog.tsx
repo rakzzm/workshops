@@ -88,7 +88,7 @@ export function OrderDetailsDialog({ order, open, onOpenChange }: OrderDetailsDi
                 <TableBody>
                     {items.map((item: any, i: number) => (
                         <TableRow key={i}>
-                            <TableCell>{item.partName || "Unknown Part"}</TableCell>
+                            <TableCell>{item.partName || item.name || "Unknown Part"}</TableCell>
                             <TableCell className="font-mono text-xs text-muted-foreground">{item.partId}</TableCell>
                             <TableCell className="text-right font-medium">{item.quantity}</TableCell>
                         </TableRow>
