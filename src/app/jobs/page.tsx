@@ -7,14 +7,22 @@ import { ClipboardCheck, Clock, TrendingUp, CheckCircle2, XCircle, Play } from "
 import { approveJob, rejectJob, startJob, completeJob } from "@/app/actions/job-actions"
 
 export default async function JobsPage() {
-  const jobs = await prisma.jobBoard.findMany({
-    orderBy: { submittedAt: 'desc' },
-    include: {
-      customer: true,
-      vehicle: true,
-      mechanic: true,
-    }
-  })
+  let jobs: any[] = []
+  
+  try {
+    jobs = await prisma.jobBoard.findMany({
+      orderBy: { submittedAt: 'desc' },
+      include: {
+        customer: true,
+        vehicle: true,
+        mechanic: true,
+      }
+    })
+  } catch (error) {
+    console.log('Database not available, showing empty jobs list')
+    // Return empty array if database doesn't exist (Vercel)
+    jobs = []
+  }
 
   const stats = {
     total: jobs.length,
