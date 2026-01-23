@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState, useEffect } from "react"
 import { getTickets, getTicketDetails, addMessage, updateTicketStatus } from "@/app/actions/ticket-actions"
+// Tabs removed
 import { SLABadge } from "@/components/feedback/sla-badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -10,7 +11,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
-// Tabs removed
 import { Search, Filter, Send, User, Car, CheckCircle2, Clock } from "lucide-react"
 
 interface Ticket {

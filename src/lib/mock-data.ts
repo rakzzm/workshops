@@ -352,3 +352,202 @@ export const MOCK_SERVICE_RECORDS = [
     createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000) 
   }
 ]
+
+export const MOCK_TICKETS = [
+  {
+    id: 1,
+    ticketNumber: 'TKT-240001',
+    subject: 'Billing discrepancy in last service',
+    description: 'I was charged for engine oil twice in my last invoice. Please check and refund.',
+    status: 'OPEN',
+    priority: 'HIGH',
+    category: 'BILLING',
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    slaTargetDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // Tomorrow
+    resolvedAt: null,
+    customerId: 1,
+    customer: MOCK_CUSTOMERS[0],
+    vehicleId: 1,
+    vehicle: MOCK_VEHICLES[0],
+    messages: [
+      { id: 1, ticketId: 1, sender: 'CUSTOMER', content: 'Hi, I noticed double charge for engine oil.', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
+      { id: 2, ticketId: 1, sender: 'SYSTEM', content: 'Ticket created with HIGH priority.', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 2,
+    ticketNumber: 'TKT-240002',
+    subject: 'Engine noise persists after repair',
+    description: 'The rattling sound is still there when I accelerate above 60kmph.',
+    status: 'INVESTIGATING',
+    priority: 'CRITICAL',
+    category: 'MECHANICAL',
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    slaTargetDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Yesterday (Overdue)
+    resolvedAt: null,
+    customerId: 2,
+    customer: MOCK_CUSTOMERS[1],
+    vehicleId: 2,
+    vehicle: MOCK_VEHICLES[1],
+    messages: [
+      { id: 3, ticketId: 2, sender: 'CUSTOMER', content: 'Noise is still coming.', timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) },
+      { id: 4, ticketId: 2, sender: 'ADMIN', content: 'Bring the car in tomorrow, we will inspect again for free.', timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 3,
+    ticketNumber: 'TKT-240003',
+    subject: 'Appreciation for quick service',
+    description: 'Just wanted to say thanks for the quick battery replacement yesterday.',
+    status: 'RESOLVED',
+    priority: 'LOW',
+    category: 'SERVICE_QUALITY',
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+    resolvedAt: new Date(),
+    customerId: 3,
+    customer: MOCK_CUSTOMERS[2],
+    vehicleId: 3,
+    vehicle: MOCK_VEHICLES[2],
+    messages: [
+      { id: 5, ticketId: 3, sender: 'CUSTOMER', content: 'Great service team!', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
+      { id: 6, ticketId: 3, sender: 'ADMIN', content: 'Thank you for your feedback! Drive safe.', timestamp: new Date() }
+    ]
+  },
+  {
+    id: 4,
+    ticketNumber: 'TKT-240004',
+    subject: 'AC cooling issue inquiry',
+    description: 'My AC takes too long to cool. How much would a gas refill cost?',
+    status: 'WAITING',
+    priority: 'MEDIUM',
+    category: 'INQUIRY',
+    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+    slaTargetDate: new Date(Date.now() + 20 * 60 * 60 * 1000),
+    resolvedAt: null,
+    customerId: 4,
+    customer: MOCK_CUSTOMERS[3],
+    vehicleId: 4,
+    vehicle: MOCK_VEHICLES[3],
+    messages: [
+      { id: 7, ticketId: 4, sender: 'CUSTOMER', content: 'Cost for AC refill?', timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 5,
+    ticketNumber: 'TKT-240005',
+    subject: 'Parts not available',
+    description: 'I was told the side mirror is out of stock. When will it arrive?',
+    status: 'OPEN',
+    priority: 'MEDIUM',
+    category: 'INVENTORY',
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+    resolvedAt: null,
+    customerId: 5,
+    customer: MOCK_CUSTOMERS[4],
+    vehicleId: 5,
+    vehicle: MOCK_VEHICLES[4],
+    messages: [
+      { id: 8, ticketId: 5, sender: 'CUSTOMER', content: 'Any update on the mirror?', timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) },
+      { id: 9, ticketId: 5, sender: 'SYSTEM', content: 'Ticket overdue by 8 days.', timestamp: new Date() }
+    ]
+  },
+  {
+    id: 6,
+    ticketNumber: 'TKT-240006',
+    subject: 'Request for service history report',
+    description: 'I need a PDF of all my service history for insurance claim.',
+    status: 'RESOLVED',
+    priority: 'MEDIUM',
+    category: 'OTHER',
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    resolvedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    customerId: 6,
+    customer: MOCK_CUSTOMERS[5],
+    vehicleId: 6,
+    vehicle: MOCK_VEHICLES[5],
+    messages: [
+      { id: 10, ticketId: 6, sender: 'CUSTOMER', content: 'Need PDF for insurance.', timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000) },
+      { id: 11, ticketId: 6, sender: 'ADMIN', content: 'Sent to your email.', timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 7,
+    ticketNumber: 'TKT-240007',
+    subject: 'Brake fluid leakage',
+    description: 'There is a small leak near the rear wheel.',
+    status: 'OPEN',
+    priority: 'CRITICAL',
+    category: 'MECHANICAL',
+    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
+    slaTargetDate: new Date(Date.now() + 3 * 60 * 60 * 1000), // Due in 3 hours
+    resolvedAt: null,
+    customerId: 7,
+    customer: MOCK_CUSTOMERS[6],
+    vehicleId: 7,
+    vehicle: MOCK_VEHICLES[6],
+    messages: [
+      { id: 12, ticketId: 7, sender: 'CUSTOMER', content: 'Its leaking heavily now.', timestamp: new Date(Date.now() - 30 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 8,
+    ticketNumber: 'TKT-240008',
+    subject: 'Wrong contact number in invoice',
+    description: 'Please update my phone number in your records.',
+    status: 'RESOLVED',
+    priority: 'LOW',
+    category: 'OTHER',
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000),
+    resolvedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+    customerId: 8,
+    customer: MOCK_CUSTOMERS[7],
+    vehicleId: 8,
+    vehicle: MOCK_VEHICLES[7],
+    messages: [
+      { id: 13, ticketId: 8, sender: 'CUSTOMER', content: 'My new number is 9988776655.', timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000) },
+      { id: 14, ticketId: 8, sender: 'ADMIN', content: 'Updated.', timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 9,
+    ticketNumber: 'TKT-240009',
+    subject: 'Car delivery delay complaint',
+    description: 'You promised delivery by 5 PM but I got it at 9 PM.',
+    status: 'INVESTIGATING',
+    priority: 'HIGH',
+    category: 'SERVICE_QUALITY',
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    resolvedAt: null,
+    customerId: 9,
+    customer: MOCK_CUSTOMERS[8],
+    vehicleId: 9,
+    vehicle: MOCK_VEHICLES[8],
+    messages: [
+      { id: 15, ticketId: 9, sender: 'CUSTOMER', content: 'Why the delay?', timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) }
+    ]
+  },
+  {
+    id: 10,
+    ticketNumber: 'TKT-240010',
+    subject: 'Paint scratch during service',
+    description: 'I found a new scratch on the bumper after pick up.',
+    status: 'OPEN',
+    priority: 'HIGH',
+    category: 'DAMAGE',
+    createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+    slaTargetDate: new Date(Date.now() + 12 * 60 * 60 * 1000),
+    resolvedAt: null,
+    customerId: 10,
+    customer: MOCK_CUSTOMERS[9],
+    vehicleId: 10,
+    vehicle: MOCK_VEHICLES[9],
+    messages: [
+      { id: 16, ticketId: 10, sender: 'CUSTOMER', content: 'Sharing photo shortly.', timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000) }
+    ]
+  }
+]

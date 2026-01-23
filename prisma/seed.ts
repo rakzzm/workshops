@@ -289,28 +289,50 @@ async function main() {
   console.log('Created 5 Service records')
 
   // 10. Create Support Tickets (Feedback Menu)
-  const ticketCategories = ['MECHANICAL', 'SERVICE_QUALITY', 'BILLING', 'OTHER']
-  const ticketPriorities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+  const ticketSubjects = [
+    "Strange noise from engine", "Inquiry about latest bill", "AC not cooling", "Brake squealing", 
+    "Oil leak detected", "Service delay complaint", "Appreciation for staff", "Parts availability check",
+    "Warranty question", "Booking reschedule request"
+  ]
+  const ticketDescriptions = [
+    "I hear a clicking sound when accelerating above 40km/h.",
+    "The labor charges on my last service seem higher than the estimate provided.",
+    "AC blows hot air after 10 mins of driving.",
+    "Squealing noise from front right wheel when braking.",
+    "Found oil drops on garage floor after parking.",
+    "Car was promised yesterday but still not ready.",
+    "Great service by the team, very professional.",
+    "Do you have side mirrors for Swift 2022 in stock?",
+    "Is my battery replacement covered under warranty?",
+    "Need to move my appointment to next Tuesday."
+  ]
+  const ticketCategories = ['MECHANICAL', 'BILLING', 'MECHANICAL', 'MECHANICAL', 'MECHANICAL', 'SERVICE_QUALITY', 'SERVICE_QUALITY', 'INVENTORY', 'OTHER', 'OTHER']
+  const ticketPriorities = ['HIGH', 'MEDIUM', 'MEDIUM', 'HIGH', 'CRITICAL', 'HIGH', 'LOW', 'MEDIUM', 'LOW', 'LOW']
+  const ticketStatuses = ['OPEN', 'OPEN', 'INVESTIGATING', 'OPEN', 'CRITICAL', 'RESOLVED', 'RESOLVED', 'WAITING', 'OPEN', 'RESOLVED']
   
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 10; i++) {
     const vIdx = i % vehicles.length
     const ticketNum = `TKT-2026-${100 + i}`
+    
+    // Calculate dates based on status
+    const isResolved = ticketStatuses[i] === 'RESOLVED';
+    const createdDaysAgo = 10 - i;
     
     const ticket = await prisma.ticket.upsert({
       where: { ticketNumber: ticketNum },
       update: {},
       create: {
         ticketNumber: ticketNum,
-        subject: i % 2 === 0 ? "Strange noise from engine" : "Inquiry about latest bill",
-        description: i % 2 === 0 
-          ? "I hear a clicking sound when accelerating above 40km/h." 
-          : "The labor charges on my last service seem higher than the estimate provided.",
-        status: i === 0 ? 'RESOLVED' : i === 1 ? 'INVESTIGATING' : 'OPEN',
+        subject: ticketSubjects[i],
+        description: ticketDescriptions[i],
+        status: ticketStatuses[i],
         priority: ticketPriorities[i],
         category: ticketCategories[i],
         customerId: vehicles[vIdx].customerId,
         vehicleId: vehicles[vIdx].id,
-        slaTargetDate: new Date(Date.now() + (24 * 60 * 60 * 1000)), // 24 hours from now
+        createdAt: new Date(Date.now() - (createdDaysAgo * 24 * 60 * 60 * 1000)),
+        slaTargetDate: new Date(Date.now() + (24 * 60 * 60 * 1000)),
+        resolvedAt: isResolved ? new Date() : null,
       }
     })
 
@@ -320,33 +342,33 @@ async function main() {
         ticketId: ticket.id,
         sender: 'CUSTOMER',
         content: ticket.description,
-        timestamp: new Date(Date.now() - (12 * 60 * 60 * 1000))
+        timestamp: new Date(Date.now() - (createdDaysAgo * 24 * 60 * 60 * 1000))
       }
     })
 
-    if (i < 3) {
+    if (i % 3 === 0) {
       await prisma.ticketMessage.create({
         data: {
           ticketId: ticket.id,
           sender: 'ADMIN',
           content: "Thank you for reaching out. We are looking into this and will get back to you shortly.",
-          timestamp: new Date(Date.now() - (6 * 60 * 60 * 1000))
+          timestamp: new Date(Date.now() - ((createdDaysAgo - 1) * 24 * 60 * 60 * 1000))
         }
       })
     }
 
-    if (i === 0) {
+    if (isResolved) {
       await prisma.ticketMessage.create({
         data: {
           ticketId: ticket.id,
           sender: 'ADMIN',
           content: "The issue has been resolved. Please let us know if you need anything else.",
-          timestamp: new Date(Date.now() - (1 * 60 * 60 * 1000))
+          timestamp: new Date()
         }
       })
     }
   }
-  console.log('Created 4 Support Tickets with Messages')
+  console.log('Created 10 Support Tickets with Messages')
 
   // 11. Create Purchase Orders
   for (let i = 0; i < 5; i++) {
