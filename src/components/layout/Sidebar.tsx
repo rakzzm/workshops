@@ -54,13 +54,13 @@ export function Sidebar() {
   if (pathname === '/login' || pathname === '/signup') return null
 
   return (
-    <div className="flex h-screen w-16 flex-col justify-between border-r bg-background/60 backdrop-blur-xl transition-all duration-300 hover:w-64 group z-20 shadow-xl overflow-hidden">
+    <div className="flex h-screen w-64 flex-col justify-between border-r bg-background/60 backdrop-blur-xl z-20 shadow-xl overflow-hidden shrink-0">
       <div className="flex flex-col h-full">
-        <div className="flex h-16 items-center justify-center border-b px-4 group-hover:justify-start">
+        <div className="flex h-16 items-center justify-start border-b px-4">
             <div className="relative h-8 w-8 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
              <Image src="/icon.png" alt="AutoFix Logo" width={32} height={32} className="object-cover" />
             </div>
-            <span className="ml-3 font-bold text-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100 whitespace-nowrap">
+            <span className="ml-3 font-bold text-lg whitespace-nowrap">
               AutoFix
             </span>
         </div>
@@ -75,14 +75,14 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors relative group/item",
+                  "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors relative",
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <Icon className={cn("h-5 w-5 shrink-0", isActive && "text-primary")} />
-                <span className="ml-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 whitespace-nowrap">
+                <span className="ml-3 whitespace-nowrap">
                   {item.name}
                 </span>
                 
@@ -101,14 +101,14 @@ export function Sidebar() {
                     <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0 flex items-center justify-center text-xs font-bold text-slate-700 uppercase">
                         {user.name?.charAt(0) || 'U'}
                     </div>
-                    <div className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap flex-1 overflow-hidden">
+                    <div className="ml-3 whitespace-nowrap flex-1 overflow-hidden">
                         <div className="text-foreground font-semibold truncate">{user.name}</div>
                         <div className="text-xs truncate uppercase">{user.role}</div>
                     </div>
                 </div>
                 
-                {/* Logout Button (Only visible on hover or simplified) */}
-                 <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 pb-2">
+                {/* Logout Button */}
+                 <div className="mt-1 px-3 pb-2">
                     <button 
                       onClick={logout}
                       className="text-xs text-red-500 hover:text-red-700 w-full text-left flex items-center gap-2"
@@ -123,7 +123,7 @@ export function Sidebar() {
                     <div className="h-8 w-8 rounded-full bg-slate-100 shrink-0 flex items-center justify-center">
                         <Shield className="h-4 w-4" />
                     </div>
-                    <div className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold">
+                    <div className="ml-3 whitespace-nowrap font-bold">
                         Sign In
                     </div>
                 </Link>
