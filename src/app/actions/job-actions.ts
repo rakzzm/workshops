@@ -183,3 +183,19 @@ export async function deleteJob(id: number | string) {
     return { success: false, error: "Failed to delete job" }
   }
 }
+// Void-returning wrappers for Form Actions
+export async function handleApproveJob(id: number | string) {
+  await approveJob(id, { approvedBy: "Manager" })
+}
+
+export async function handleRejectJob(id: number | string) {
+  await rejectJob(id, { rejectedBy: "Manager", rejectionReason: "Not approved" })
+}
+
+export async function handleStartJob(id: number | string) {
+  await startJob(id)
+}
+
+export async function handleCompleteJob(id: number | string, finalCost: number) {
+  await completeJob(id, { finalCost })
+}

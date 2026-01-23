@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ClipboardCheck, Clock, TrendingUp, CheckCircle2, XCircle, Play } from "lucide-react"
-import { approveJob, rejectJob, startJob, completeJob } from "@/app/actions/job-actions"
+import { handleApproveJob, handleRejectJob, handleStartJob, handleCompleteJob } from "@/app/actions/job-actions"
 
 export default async function JobsPage() {
   let jobs: any[] = []
@@ -181,12 +181,12 @@ export default async function JobsPage() {
               <div className="flex gap-2 pt-2 border-t">
                 {job.status === 'PENDING' && (
                   <>
-                    <form action={approveJob.bind(null, job.id, { approvedBy: "Manager" })} className="flex-1">
+                    <form action={handleApproveJob.bind(null, job.id)} className="flex-1">
                       <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" type="submit">
                         <CheckCircle2 className="h-3 w-3 mr-1" /> Approve
                       </Button>
                     </form>
-                    <form action={rejectJob.bind(null, job.id, { rejectedBy: "Manager", rejectionReason: "Not approved" })} className="flex-1">
+                    <form action={handleRejectJob.bind(null, job.id)} className="flex-1">
                       <Button size="sm" variant="destructive" className="w-full" type="submit">
                         <XCircle className="h-3 w-3 mr-1" /> Reject
                       </Button>
@@ -194,14 +194,14 @@ export default async function JobsPage() {
                   </>
                 )}
                 {job.status === 'APPROVED' && (
-                  <form action={startJob.bind(null, job.id)} className="flex-1">
+                  <form action={handleStartJob.bind(null, job.id)} className="flex-1">
                     <Button size="sm" className="w-full bg-purple-600 hover:bg-purple-700" type="submit">
                       <Play className="h-3 w-3 mr-1" /> Start Work
                     </Button>
                   </form>
                 )}
                 {job.status === 'IN_PROGRESS' && (
-                  <form action={completeJob.bind(null, job.id, { finalCost: job.estimatedCost || 0 })} className="flex-1">
+                  <form action={handleCompleteJob.bind(null, job.id, job.estimatedCost || 0)} className="flex-1">
                     <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" type="submit">
                       <CheckCircle2 className="h-3 w-3 mr-1" /> Complete
                     </Button>
