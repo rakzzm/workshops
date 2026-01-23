@@ -85,7 +85,7 @@ export async function getMechanics() {
         }
         return mechanics
     } catch (error) {
-        console.error("Database error in getMechanics, falling back:", error)
+        console.warn("Database disconnected (Demo Mode): Using mock mechanics data.", error)
         return MOCK_MECHANICS as any
     }
 }

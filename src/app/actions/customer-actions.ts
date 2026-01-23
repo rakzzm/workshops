@@ -123,25 +123,6 @@ export async function getCustomers() {
     }
     
     return customers
-  } catch (error) {
-    console.error("Get Customers Database Error (using mock data):", error)
-    
-    // Enrich mock customers with vehicles and service records
-    // precise matching by ID string (MOCK data uses string IDs '1', '2' etc)
-    const enrichedCustomers = MOCK_CUSTOMERS.map(cust => {
-        const vehicles = MOCK_VEHICLES.filter(v => v.customerId === cust.id).map(v => {
-            const records = MOCK_SERVICE_RECORDS.filter(r => r.vehicleId === v.id)
-            return {
-                ...v,
-                serviceRecords: records
-            }
-        })
-        return {
-            ...cust,
-            vehicles: vehicles
-        }
-    })
-
     return enrichedCustomers as any
   }
 }

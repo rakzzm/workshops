@@ -106,7 +106,7 @@ export async function getVendors() {
     
     return vendors
   } catch (error) {
-    console.error("Database error in getVendors, falling back:", error)
+    console.warn("Database disconnected (Demo Mode): Using mock vendor data.", error)
     return MOCK_VENDORS as any
   }
 }
