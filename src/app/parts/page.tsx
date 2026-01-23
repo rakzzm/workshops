@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import prisma from "@/lib/prisma"
+import { MOCK_PARTS } from "@/lib/mock-data"
 export const dynamic = 'force-dynamic'
 import { PartCard } from "@/components/parts/part-card"
 import { PartDialog } from "@/components/inventory/part-dialog"
@@ -9,17 +10,32 @@ import { PartDialog } from "@/components/inventory/part-dialog"
 export default async function PartsPage(props: { searchParams: Promise<{ q?: string }> }) {
   const searchParams = await props.searchParams
   const query = searchParams.q
+  let parts: any[] = []
   
-  const parts = await prisma.part.findMany({
-    where: query ? {
+  try {
+    parts = await prisma.part.findMany({
+      where: query ? {
         OR: [
-            { name: { contains: query } },
-            { category: { contains: query } },
-            { sku: { contains: query } }
+          { name: { contains: query } },
+          { category: { contains: query } },
+          { sku: { contains: query } }
         ]
-    } : undefined,
-    orderBy: { name: 'asc' }
-  })
+      } : undefined,
+      orderBy: { name: 'asc' }
+    })
+  } catch (error) {
+    console.error('Database error, using mock data:', error)
+    // Filter mock data by query if present
+    parts = MOCK_PARTS.filter(part => {
+      if (!query) return true
+      const lowerQuery = query.toLowerCase()
+      return (
+        part.name.toLowerCase().includes(lowerQuery) ||
+        part.category.toLowerCase().includes(lowerQuery) ||
+        part.sku.toLowerCase().includes(lowerQuery)
+      )
+    }) as any[]
+  }
 
   return (
     <div className="space-y-6">

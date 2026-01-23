@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { MOCK_VENDORS } from "@/lib/mock-data"
 export const dynamic = 'force-dynamic'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,12 +9,19 @@ import { VendorDialog } from "@/components/vendors/vendor-dialog"
 import { deleteVendor } from "@/app/actions/vendor-actions"
 
 export default async function VendorsPage() {
-  const vendors = await prisma.vendor.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: {
-      purchaseOrders: true
-    }
-  })
+  let vendors: any[] = []
+  
+  try {
+    vendors = await prisma.vendor.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        purchaseOrders: true
+      }
+    })
+  } catch (error) {
+    console.error('Database error, using mock data:', error)
+    vendors = MOCK_VENDORS as any[]
+  }
 
   const totalVendors = vendors.length
   const activeVendors = vendors.filter(v => v.status === 'ACTIVE').length

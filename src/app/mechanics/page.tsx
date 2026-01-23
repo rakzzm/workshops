@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { MOCK_MECHANICS } from "@/lib/mock-data"
 export const dynamic = 'force-dynamic'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,14 +9,21 @@ import { MechanicDialog } from "@/components/mechanics/mechanic-dialog"
 import { deleteMechanic } from "@/app/actions/mechanic-actions"
 
 export default async function MechanicsPage() {
-  const mechanics = await prisma.mechanic.findMany({
+  let mechanics: any[] = []
+  
+  try {
+    mechanics = await prisma.mechanic.findMany({
       orderBy: { performanceRating: 'desc' },
       include: {
-          _count: {
-              select: { serviceRecords: true }
-          }
+        _count: {
+          select: { serviceRecords: true }
+        }
       }
-  })
+    })
+  } catch (error) {
+    console.error('Database error, using mock data:', error)
+    mechanics = MOCK_MECHANICS as any[]
+  }
 
   // Calculate stats
   const totalMechanics = mechanics.length
