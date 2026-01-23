@@ -1,46 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Paths that require authentication
-const protectedPaths = [
-  '/',
-  '/customers',
-  '/vendors',
-  '/mechanics',
-  '/inventory',
-  '/parts',
-  '/orders',
-  '/jobs',
-  '/services',
-  '/service-history',
-  '/feedback',
-  '/support',
-  '/settings',
-  '/reports'
-]
+// Since we're using client-side localStorage authentication,
+// middleware can't check auth state (it's on the client).
+// We'll just allow all routes and let the AuthContext handle redirects.
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
-  // Allow login page and API routes
-  if (pathname === '/login' || pathname.startsWith('/api/')) {
-    return NextResponse.next()
-  }
-
-  // Check if path requires authentication
-  const isProtected = protectedPaths.some(path => pathname === path || pathname.startsWith(path + '/'))
-  
-  if (isProtected) {
-    // Check for session cookie
-    const session = request.cookies.get('session')
-    
-    if (!session) {
-      // Redirect to login if no session
-      const loginUrl = new URL('/login', request.url)
-      return NextResponse.redirect(loginUrl)
-    }
-  }
-
+  // Allow all routes - client-side AuthContext will handle auth
   return NextResponse.next()
 }
 

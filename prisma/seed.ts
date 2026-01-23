@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -7,16 +6,14 @@ async function main() {
   console.log('Seeding database...')
 
   // 1. Create Auth Users (Admin & Standard User)
-  const adminPassword = await bcrypt.hash('admin123456', 10)
-  const userPassword = await bcrypt.hash('user123456', 10)
-
+  // Using plain text passwords to match POS app
   const admin = await prisma.user.upsert({
     where: { email: 'admin@meghcomm.store' },
     update: {},
     create: {
       email: 'admin@meghcomm.store',
       name: 'Workshop Admin',
-      password: adminPassword,
+      password: 'admin123456',  // Plain text
       role: 'ADMIN',
     },
   })
@@ -28,7 +25,7 @@ async function main() {
     create: {
       email: 'user@meghcomm.store',
       name: 'John Doe',
-      password: userPassword,
+      password: 'user123456',  // Plain text
       role: 'USER',
     },
   })

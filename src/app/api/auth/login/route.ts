@@ -1,71 +1,44 @@
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
-import { serialize } from 'cookie'
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json()
+    const body = await request.json();
+    const { email, password } = body;
 
-    // Find user
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 }
+      );
+    }
+
     const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        password: true
-      }
-    })
+      where: { email }
+    });
 
-    if (!user) {
+    // Plain text password comparison (matching seeded passwords)
+    if (!user || user.password !== password) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
-      )
+      );
     }
 
-    // Verify password
-    const isValid = await bcrypt.compare(password, user.password)
-    if (!isValid) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
-    }
-
-    // Create session data (exclude password)
-    const sessionData = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role
-    }
-
-    // Create session cookie
-    const cookie = serialize('session', JSON.stringify(sessionData), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
-    })
-
+    // Return user info without password
+    const { password: _, ...userWithoutPassword } = user;
+    
+    return NextResponse.json(userWithoutPassword);
+  } catch (error: any) {
+    console.error('Login error:', error);
     return NextResponse.json(
-      { user: sessionData },
-      {
-        status: 200,
-        headers: { 'Set-Cookie': cookie }
-      }
-    )
-  } catch (error) {
-    console.error('Login error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Login failed', 
+        details: error?.message || String(error)
+      },
       { status: 500 }
-    )
+    );
   }
 }

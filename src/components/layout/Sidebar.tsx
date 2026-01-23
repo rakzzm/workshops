@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Car, Shield, ShoppingCart } from "lucide-react"
-import { useSession } from "@/hooks/use-session"
+import { useAuth } from "@/contexts/AuthContext"
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutGrid, roles: ['ADMIN', 'USER'] },
@@ -25,7 +25,7 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { user, logout } = useSession()
+  const { user, logout } = useAuth()
   const userRole = user?.role || 'USER'
 
   // Filter items based on role
