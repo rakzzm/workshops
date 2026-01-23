@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createPart, updatePart } from "@/app/actions/inventory-actions"
-import { Plus, Loader2 } from "lucide-react"
+import { Plus, Loader2, Upload, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface PartDialogProps {
