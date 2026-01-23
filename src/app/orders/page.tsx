@@ -15,7 +15,10 @@ export default async function PurchaseOrdersPage() {
     orders = await prisma.purchaseOrder.findMany()
   } catch (error) {
     console.error('Database error for orders, using mock data:', error)
-    orders = MOCK_PURCHASE_ORDERS as any[]
+    orders = MOCK_PURCHASE_ORDERS.map(order => ({
+      ...order,
+      items: typeof order.items === 'string' ? JSON.parse(order.items) : order.items
+    })) as any[]
   }
 
   try {
