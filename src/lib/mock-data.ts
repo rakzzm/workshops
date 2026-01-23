@@ -99,7 +99,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '1', 
     mechanicId: '1', 
     serviceType: 'Oil Change', 
-    date: new Date('2024-01-15'), 
+    date: new Date(), 
     description: 'Regular oil change and filter replacement', 
     complaint: 'Engine noise and regular service due',
     cost: 2500, 
@@ -117,7 +117,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '103', itemType: 'PART', partId: '9', quantity: 3, unitPrice: 280, costAtTime: 840, taxes: 0, description: 'Coolant', part: MOCK_PARTS[8] }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-15') 
+    createdAt: new Date() // Today
   },
   { 
     id: '2', 
@@ -126,7 +126,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '2', 
     mechanicId: '2', 
     serviceType: 'Brake Service', 
-    date: new Date('2024-01-16'), 
+    date: new Date(Date.now() - 2 * 60 * 60 * 1000), // Today, 2 hours ago
     description: 'Brake pad replacement', 
     complaint: 'Squeaking noise when braking',
     cost: 1800, 
@@ -143,7 +143,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '202', itemType: 'LABOR', quantity: 2, unitPrice: 300, costAtTime: 600, taxes: 0, description: 'Brake Pad Installation' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-16') 
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000) 
   },
   { 
     id: '3', 
@@ -152,7 +152,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '3', 
     mechanicId: '3', 
     serviceType: 'AC Service', 
-    date: new Date('2024-01-17'), 
+    date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Yesterday
     description: 'AC gas refill and cleaning', 
     complaint: 'AC not cooling properly',
     cost: 3200, 
@@ -169,7 +169,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '302', itemType: 'LABOR', quantity: 1, unitPrice: 800, costAtTime: 800, taxes: 0, description: 'AC Service Charge' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-17') 
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '4', 
@@ -178,7 +178,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '4', 
     mechanicId: '4', 
     serviceType: 'Chain Lubrication', 
-    date: new Date('2024-01-18'), 
+    date: new Date(Date.now() - 1.5 * 24 * 60 * 60 * 1000), // Yesterday
     description: 'Chain cleaning and lubrication', 
     complaint: 'Chain looking dry and rusty',
     cost: 800, 
@@ -195,7 +195,7 @@ export const MOCK_SERVICE_RECORDS = [
          { id: '402', itemType: 'PART', partId: null, quantity: 1, unitPrice: 500, costAtTime: 500, taxes: 0, description: 'Chain Lube Spray' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-18') 
+    createdAt: new Date(Date.now() - 1.5 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '5', 
@@ -204,7 +204,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '5', 
     mechanicId: '5', 
     serviceType: 'General Service', 
-    date: new Date('2024-01-19'), 
+    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago (This week)
     description: 'Complete vehicle checkup', 
     complaint: 'General service due',
     cost: 4500, 
@@ -222,7 +222,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '503', itemType: 'LABOR', quantity: 1, unitPrice: 2500, costAtTime: 2500, taxes: 0, description: 'General Service Labor' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-19') 
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '6', 
@@ -231,7 +231,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '6', 
     mechanicId: '6', 
     serviceType: 'Engine Repair', 
-    date: new Date('2024-01-20'), 
+    date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago (This week)
     description: 'Minor engine repairs', 
     complaint: 'Vibration in engine',
     cost: 8500, 
@@ -248,7 +248,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '602', itemType: 'PART', partId: '4', quantity: 4, unitPrice: 800, costAtTime: 3200, taxes: 0, description: 'Spark Plugs', part: MOCK_PARTS[3] }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-20') 
+    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '7', 
@@ -257,7 +257,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '7', 
     mechanicId: '7', 
     serviceType: 'Battery Replacement', 
-    date: new Date('2024-01-21'), 
+    date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago (This week)
     description: 'Old battery replacement', 
     complaint: 'Car not starting in morning',
     cost: 5200, 
@@ -274,7 +274,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '702', itemType: 'LABOR', quantity: 1, unitPrice: 200, costAtTime: 200, taxes: 0, description: 'Battery Fitment' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-21') 
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '8', 
@@ -283,7 +283,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '8', 
     mechanicId: '8', 
     serviceType: 'Tire Change', 
-    date: new Date('2024-01-22'), 
+    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago (This month)
     description: 'Front and rear tire replacement', 
     complaint: 'Tires worn out',
     cost: 3800, 
@@ -299,7 +299,7 @@ export const MOCK_SERVICE_RECORDS = [
          { id: '801', itemType: 'LABOR', quantity: 1, unitPrice: 400, costAtTime: 400, taxes: 0, description: 'Tire Changing Labor' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-22') 
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '9', 
@@ -308,7 +308,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '9', 
     mechanicId: '9', 
     serviceType: 'Suspension Repair', 
-    date: new Date('2024-01-23'), 
+    date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago (This month)
     description: 'Front suspension replacement', 
     complaint: 'Thud sound from front suspension',
     cost: 12000, 
@@ -324,7 +324,7 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '901', itemType: 'PART', partId: '5', quantity: 2, unitPrice: 2500, costAtTime: 5000, taxes: 0, description: 'Suspension Coil', part: MOCK_PARTS[4] }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-23') 
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000) 
   },
   { 
     id: '10', 
@@ -333,7 +333,7 @@ export const MOCK_SERVICE_RECORDS = [
     customerId: '10', 
     mechanicId: '10', 
     serviceType: 'Paint Job', 
-    date: new Date('2024-01-24'), 
+    date: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000), // 25 days ago (This month)
     description: 'Fuel tank repainting', 
     complaint: 'Scratches on fuel tank',
     cost: 6500, 
@@ -349,6 +349,6 @@ export const MOCK_SERVICE_RECORDS = [
         { id: '1001', itemType: 'LABOR', quantity: 1, unitPrice: 5000, costAtTime: 5000, taxes: 0, description: 'Painting Labor & Materials' }
     ], 
     feedback: [], 
-    createdAt: new Date('2024-01-24') 
-  },
+    createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000) 
+  }
 ]
