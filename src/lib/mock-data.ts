@@ -40,16 +40,16 @@ export const MOCK_VENDORS = [
 ]
 
 export const MOCK_PARTS = [
-  { id: '1', partNumber: 'PART001', name: 'Engine Oil Filter', category: 'Engine', quantity: 45, minStockLevel: 10, unitPrice: 250, supplier: 'Auto Parts India', location: 'A-01', status: 'IN_STOCK', sku: 'ENG-FILT-001', createdAt: new Date() },
-  { id: '2', partNumber: 'PART002', name: 'Brake Pads (Front)', category: 'Brakes', quantity: 32, minStockLevel: 15, unitPrice: 1200, supplier: 'Brake Masters', location: 'B-12', status: 'IN_STOCK', sku: 'BRK-PAD-002', createdAt: new Date() },
-  { id: '3', partNumber: 'PART003', name: 'Air Filter', category: 'Engine', quantity: 28, minStockLevel: 12, unitPrice: 350, supplier: 'Auto Parts India', location: 'A-03', status: 'IN_STOCK', sku: 'ENG-AIR-003', createdAt: new Date() },
-  { id: '4', partNumber: 'PART004', name: 'Spark Plugs Set', category: 'Electrical', quantity: 8, minStockLevel: 10, unitPrice: 800, supplier: 'Electrical Auto Systems', location: 'C-08', status: 'LOW_STOCK', sku: 'ELC-SPK-004', createdAt: new Date() },
-  { id: '5', partNumber: 'PART005', name: 'Suspension Coil', category: 'Suspension', quantity: 15, minStockLevel: 8, unitPrice: 2500, supplier: 'Suspension Pro', location: 'D-15', status: 'IN_STOCK', sku: 'SUS-COIL-005', createdAt: new Date() },
-  { id: '6', partNumber: 'PART006', name: 'Headlight Bulb', category: 'Electrical', quantity: 52, minStockLevel: 20, unitPrice: 180, supplier: 'Electrical Auto Systems', location: 'C-22', status: 'IN_STOCK', sku: 'ELC-BLB-006', createdAt: new Date() },
-  { id: '7', partNumber: 'PART007', name: 'Battery 12V 45Ah', category: 'Electrical', quantity: 12, minStockLevel: 8, unitPrice: 4500, supplier: 'Battery Plus', location: 'C-30', status: 'IN_STOCK', sku: 'ELC-BAT-007', createdAt: new Date() },
-  { id: '8', partNumber: 'PART008', name: 'Wiper Blades Pair', category: 'Body', quantity: 25, minStockLevel: 12, unitPrice: 450, supplier: 'Body Parts Warehouse', location: 'E-05', status: 'IN_STOCK', sku: 'BDY-WIP-008', createdAt: new Date() },
-  { id: '9', partNumber: 'PART009', name: 'Coolant 1L', category: 'Engine', quantity: 38, minStockLevel: 15, unitPrice: 280, supplier: 'Oil Solutions', location: 'A-18', status: 'IN_STOCK', sku: 'ENG-COL-009', createdAt: new Date() },
-  { id: '10', partNumber: 'PART010', name: 'Disc Brake Rotor', category: 'Brakes', quantity: 6, minStockLevel: 8, unitPrice: 1800, supplier: 'Brake Masters', location: 'B-25', status: 'LOW_STOCK', sku: 'BRK-DSC-010', createdAt: new Date() },
+  { id: '1', partNumber: 'PART001', name: 'Engine Oil Filter', category: 'Engine', quantity: 45, stock: 45, minStockLevel: 10, unitPrice: 250, price: 250, supplier: 'Auto Parts India', location: 'A-01', status: 'IN_STOCK', sku: 'ENG-FILT-001', createdAt: new Date() },
+  { id: '2', partNumber: 'PART002', name: 'Brake Pads (Front)', category: 'Brakes', quantity: 32, stock: 32, minStockLevel: 15, unitPrice: 1200, price: 1200, supplier: 'Brake Masters', location: 'B-12', status: 'IN_STOCK', sku: 'BRK-PAD-002', createdAt: new Date() },
+  { id: '3', partNumber: 'PART003', name: 'Air Filter', category: 'Engine', quantity: 28, stock: 28, minStockLevel: 12, unitPrice: 350, price: 350, supplier: 'Auto Parts India', location: 'A-03', status: 'IN_STOCK', sku: 'ENG-AIR-003', createdAt: new Date() },
+  { id: '4', partNumber: 'PART004', name: 'Spark Plugs Set', category: 'Electrical', quantity: 8, stock: 8, minStockLevel: 10, unitPrice: 800, price: 800, supplier: 'Electrical Auto Systems', location: 'C-08', status: 'LOW_STOCK', sku: 'ELC-SPK-004', createdAt: new Date() },
+  { id: '5', partNumber: 'PART005', name: 'Suspension Coil', category: 'Suspension', quantity: 15, stock: 15, minStockLevel: 8, unitPrice: 2500, price: 2500, supplier: 'Suspension Pro', location: 'D-15', status: 'IN_STOCK', sku: 'SUS-COIL-005', createdAt: new Date() },
+  { id: '6', partNumber: 'PART006', name: 'Headlight Bulb', category: 'Electrical', quantity: 52, stock: 52, minStockLevel: 20, unitPrice: 180, price: 180, supplier: 'Electrical Auto Systems', location: 'C-22', status: 'IN_STOCK', sku: 'ELC-BLB-006', createdAt: new Date() },
+  { id: '7', partNumber: 'PART007', name: 'Battery 12V 45Ah', category: 'Electrical', quantity: 12, stock: 12, minStockLevel: 8, unitPrice: 4500, price: 4500, supplier: 'Battery Plus', location: 'C-30', status: 'IN_STOCK', sku: 'ELC-BAT-007', createdAt: new Date() },
+  { id: '8', partNumber: 'PART008', name: 'Wiper Blades Pair', category: 'Body', quantity: 25, stock: 25, minStockLevel: 12, unitPrice: 450, price: 450, supplier: 'Body Parts Warehouse', location: 'E-05', status: 'IN_STOCK', sku: 'BDY-WIP-008', createdAt: new Date() },
+  { id: '9', partNumber: 'PART009', name: 'Coolant 1L', category: 'Engine', quantity: 38, stock: 38, minStockLevel: 15, unitPrice: 280, price: 280, supplier: 'Oil Solutions', location: 'A-18', status: 'IN_STOCK', sku: 'ENG-COL-009', createdAt: new Date() },
+  { id: '10', partNumber: 'PART010', name: 'Disc Brake Rotor', category: 'Brakes', quantity: 6, stock: 6, minStockLevel: 8, unitPrice: 1800, price: 1800, supplier: 'Brake Masters', location: 'B-25', status: 'LOW_STOCK', sku: 'BRK-DSC-010', createdAt: new Date() },
 ]
 
 export const MOCK_JOBS = [
