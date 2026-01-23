@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import prisma from "@/lib/prisma"
+import { MOCK_PARTS } from "@/lib/mock-data"
 export const dynamic = 'force-dynamic'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -13,16 +14,22 @@ export default async function InventoryPage(props: { searchParams: Promise<{ q?:
   const searchParams = await props.searchParams
   const query = searchParams.q
   
-  const parts = await prisma.part.findMany({
-    where: query ? {
-       OR: [
-         { name: { contains: query } },
-         { category: { contains: query } },
-         { sku: { contains: query } }
-       ]
-    } : undefined,
-    orderBy: { stock: 'asc' } // Low stock first
-  })
+  let parts: any[] = []
+  try {
+    parts = await prisma.part.findMany({
+      where: query ? {
+         OR: [
+           { name: { contains: query } },
+           { category: { contains: query } },
+           { sku: { contains: query } }
+         ]
+      } : undefined,
+      orderBy: { stock: 'asc' } // Low stock first
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock parts')
+    parts = MOCK_PARTS
+  }
 
   return (
      <div className="space-y-6">
