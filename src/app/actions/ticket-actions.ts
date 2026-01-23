@@ -109,7 +109,20 @@ export async function addMessage(ticketId: number, content: string, sender: stri
         })
     } catch (error) {
          console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
-         // Simulate success
+         const mockIndex = MOCK_TICKETS.findIndex(t => t.id === ticketId)
+         if (mockIndex !== -1) {
+             const newMessage = {
+                 id: Date.now(),
+                 ticketId,
+                 content,
+                 sender,
+                 timestamp: new Date()
+             }
+             if (!MOCK_TICKETS[mockIndex].messages) {
+                 MOCK_TICKETS[mockIndex].messages = []
+             }
+             MOCK_TICKETS[mockIndex].messages.push(newMessage)
+         }
     }
     revalidatePath('/feedback')
 }
@@ -134,7 +147,26 @@ export async function updateTicketStatus(id: number, status: string) {
         })
     } catch (error) {
         console.warn("Database disconnected (Demo Mode): Using mock tickets.", error)
-        // Simulate success
+        const mockIndex = MOCK_TICKETS.findIndex(t => t.id === id)
+        if (mockIndex !== -1) {
+            MOCK_TICKETS[mockIndex].status = status
+            if (status === 'RESOLVED') {
+                MOCK_TICKETS[mockIndex].resolvedAt = new Date()
+            }
+            
+            // Add system message mock
+            const newMessage = {
+                 id: Date.now(),
+                 ticketId: id,
+                 content: `Status updated to ${status}`,
+                 sender: 'SYSTEM',
+                 timestamp: new Date()
+             }
+             if (!MOCK_TICKETS[mockIndex].messages) {
+                 MOCK_TICKETS[mockIndex].messages = []
+             }
+             MOCK_TICKETS[mockIndex].messages.push(newMessage)
+        }
     }
 
     revalidatePath('/feedback')

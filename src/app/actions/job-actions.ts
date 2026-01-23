@@ -78,6 +78,13 @@ export async function approveJob(id: number | string, data: any): Promise<{ succ
     return { success: true, job }
   } catch (error) {
     console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
+    // Mutate Mock Data
+    const mockIndex = MOCK_JOBS.findIndex(j => j.id == id.toString())
+    if (mockIndex !== -1) {
+        MOCK_JOBS[mockIndex].status = "APPROVED"
+        MOCK_JOBS[mockIndex].approvedAt = new Date()
+        return { success: true, job: MOCK_JOBS[mockIndex] }
+    }
     return { success: true, job: { id, status: "APPROVED", ...data } }
   }
 }
@@ -101,6 +108,11 @@ export async function rejectJob(id: number | string, data: any): Promise<{ succe
     return { success: true, job }
   } catch (error) {
     console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
+    const mockIndex = MOCK_JOBS.findIndex(j => j.id == id.toString())
+    if (mockIndex !== -1) {
+        MOCK_JOBS[mockIndex].status = "REJECTED"
+        return { success: true, job: MOCK_JOBS[mockIndex] }
+    }
     return { success: true, job: { id, status: "REJECTED", ...data } }
   }
 }
@@ -122,6 +134,12 @@ export async function startJob(id: number | string): Promise<{ success: boolean;
     return { success: true, job }
   } catch (error) {
     console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
+    const mockIndex = MOCK_JOBS.findIndex(j => j.id == id.toString())
+    if (mockIndex !== -1) {
+        MOCK_JOBS[mockIndex].status = "IN_PROGRESS"
+        MOCK_JOBS[mockIndex].startedAt = new Date()
+        return { success: true, job: MOCK_JOBS[mockIndex] }
+    }
     return { success: true, job: { id, status: "IN_PROGRESS" } }
   }
 }
@@ -170,6 +188,13 @@ export async function completeJob(id: number | string, data: any): Promise<{ suc
     return { success: true, job: result }
   } catch (error) {
     console.warn("Database disconnected (Demo Mode): Using mock jobs.", error)
+    const mockIndex = MOCK_JOBS.findIndex(j => j.id == id.toString())
+    if (mockIndex !== -1) {
+        MOCK_JOBS[mockIndex].status = "COMPLETED"
+        MOCK_JOBS[mockIndex].completedAt = new Date()
+        MOCK_JOBS[mockIndex].finalCost = data.finalCost
+        return { success: true, job: MOCK_JOBS[mockIndex] }
+    }
     return { success: true, job: { id, status: "COMPLETED", ...data } }
   }
 }
