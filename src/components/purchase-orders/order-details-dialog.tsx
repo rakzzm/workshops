@@ -32,7 +32,13 @@ export function OrderDetailsDialog({ order, open, onOpenChange }: OrderDetailsDi
   
   if (!order) return null
 
-  const items = order.items ? JSON.parse(order.items) : []
+  let items = []
+  try {
+    items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items || []
+  } catch (e) {
+    console.error("Failed to parse order items", e)
+    items = []
+  }
   const isReceived = order.status === "RECEIVED"
 
   const handleReceiveOrder = async () => {

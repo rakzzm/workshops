@@ -58,7 +58,7 @@ export default async function PurchaseOrdersPage() {
               ) : orders.map(order => {
                   let itemCount = 0
                   try {
-                      const items = order.items ? JSON.parse(order.items) : []
+                      const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items || []
                       itemCount = items.length
                   } catch {
                       itemCount = 0
