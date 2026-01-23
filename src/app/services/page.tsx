@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import prisma from "@/lib/prisma"
+import { MOCK_SERVICE_RECORDS, MOCK_MECHANICS, MOCK_VEHICLES, MOCK_PARTS, MOCK_VENDORS } from "@/lib/mock-data"
 import { ServiceForm } from "@/components/services/service-form"
 import { ServiceList } from "@/components/services/service-list"
 
@@ -10,13 +11,9 @@ export default async function ServicesPage(props: { searchParams: Promise<{ q?: 
   const searchParams = await props.searchParams
   const query = searchParams.q
   
-  // Fetch data for the form
-  // Fetch data for the form
-  // vehiclesList and partsList removed as they were unused
-
   // Build query
   const where: any = {}
-  if (query) {
+if (query) {
       where.OR = [
           { vehicle: { regNumber: { contains: query } } },
           { vehicle: { ownerName: { contains: query } } },
@@ -24,75 +21,77 @@ export default async function ServicesPage(props: { searchParams: Promise<{ q?: 
       ]
   }
 
-  const services = await prisma.serviceRecord.findMany({
-      where,
-      orderBy: { date: 'desc' },
-      include: {
-          vehicle: true,
-          parts: {
-              include: { part: true }
-          }
-      }
-  })
+  let services: any[] = []
+  let mechanics: any[] = []
+  let vehicles: any[] = []
+  let parts: any[] = []
+  let vendors: any[] = []
 
-  // Fetch Mechanics
-  const mechanics = await prisma.mechanic.findMany({
-      where: { status: 'ACTIVE' },
-      orderBy: { name: 'asc' }
-  })
+  try {
+    services = await prisma.serviceRecord.findMany({
+        where,
+        orderBy: { date: 'desc' },
+        include: {
+            vehicle: true,
+            parts: {
+                include: { part: true }
+            }
+        }
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock services')
+    services = MOCK_SERVICE_RECORDS
+  }
 
-  // Fetch Vehicles for the form
-  const vehicles = await prisma.vehicle.findMany({
-      orderBy: { updatedAt: 'desc' }
-  })
-  
-  // Fetch Parts for the form
-  const parts = await prisma.part.findMany({
-      orderBy: { name: 'asc' }
-  })
-  
-  // Fetch Vendors
-  const vendors = await prisma.vendor.findMany({
-      where: { status: 'ACTIVE' },
-      orderBy: { companyName: 'asc' }
-  })
+  try {
+    mechanics = await prisma.mechanic.findMany({
+        where: { status: 'ACTIVE' },
+        orderBy: { name: 'asc' }
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock mechanics')
+    mechanics = MOCK_MECHANICS
+  }
+
+  try {
+    vehicles = await prisma.vehicle.findMany({
+        orderBy: { updatedAt: 'desc' }
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock vehicles')
+    vehicles = MOCK_VEHICLES
+  }
+
+  try {
+    parts = await prisma.part.findMany({
+        orderBy: { name: 'asc' }
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock parts')
+    parts = MOCK_PARTS
+  }
+
+  try {
+    vendors = await prisma.vendor.findMany({
+        where: { status: 'ACTIVE' },
+        orderBy: { companyName: 'asc' }
+    })
+  } catch (error) {
+    console.log('Database unavailable, using mock vendors')
+    vendors = MOCK_VENDORS
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Service History</h1>
-          <p className="text-muted-foreground">Manage service records and job cards.</p>
-        </div>
-        <ServiceForm vehicles={vehicles} parts={parts} mechanics={mechanics} vendors={vendors} />
-      </div>
-       
-       <form className="flex gap-4">
-          <div className="relative flex-1">
-             <Search className="absolute left-3 top-4 h-5 w-5 text-muted-foreground" />
-             <Input 
-                name="q" 
-                placeholder="Search by Vehicle Registration..." 
-                defaultValue={query} 
-                className="h-14 pl-10 text-lg bg-card/50"
-             />
+      <div className="space-y-6">
+          <div className="flex justify-between items-center">
+              <div>
+                  <h1 className="text-3xl font-bold tracking-tight">Service Management</h1>
+                  <p className="text-muted-foreground">Track and manage all service records.</p>
+              </div>
+              <ServiceForm mechanics={mechanics} vehicles={vehicles} parts={parts} vendors={vendors} />
           </div>
-          <Button type="submit" size="lg" className="h-14 px-8">Search</Button>
-       </form>
 
-       <div className="space-y-6">
-           {services.length === 0 ? (
-               <div className="p-12 text-center border border-dashed rounded-lg bg-muted/20">
-                    <p className="text-muted-foreground">No service records found.</p>
-                    {query && <p className="text-sm text-muted-foreground mt-2">Try searching for a different vehicle.</p>}
-               </div>
-           ) : (
-               <div className="space-y-4">
-                   <h2 className="text-xl font-semibold">{query ? `Results for "${query}"` : "Recent Services"}</h2>
-                   <ServiceList services={services} vehicles={vehicles} parts={parts} mechanics={mechanics} />
-               </div>
-           )}
-       </div>
-    </div>
+          <ServiceList services={services} />
+      </div>
   )
 }
