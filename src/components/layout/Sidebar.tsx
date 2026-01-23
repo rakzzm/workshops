@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Car, Shield, ShoppingCart } from "lucide-react"
+import { LayoutGrid, Clock, ClipboardList, Settings2, Wrench, Users2, Box, ScanBarcode, Store, ChartBar, MessageSquare, Shield, ShoppingCart } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 
 const navigation = [
@@ -57,7 +58,7 @@ export function Sidebar() {
       <div className="flex flex-col h-full">
         <div className="flex h-16 items-center justify-center border-b px-4 group-hover:justify-start">
             <div className="relative h-8 w-8 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
-             <Car className="h-5 w-5 text-primary" />
+             <Image src="/icon.png" alt="AutoFix Logo" width={32} height={32} className="object-cover" />
             </div>
             <span className="ml-3 font-bold text-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100 whitespace-nowrap">
               AutoFix
